@@ -1,0 +1,43 @@
+<head>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap');
+    </style>
+    <Title>San Andreas Guesser</Title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="js/all.js"></script>
+    <link rel = "icon" href = "img/ico.png" type = "image/x-icon">
+    
+</head>
+
+<body class="bg-image" style="background-image: url('img/bg.png'); height: 100vh" onload="myFunction()" style="margin:0;">
+    
+    <div id="loader"></div>
+    
+    <div style="display:none;" id="page" class="animate-bottom">
+        <div class="flex-container">
+            <p class="text">Welcome to Los Santos!</p>
+            <div class="userbox">
+                    <button class="btn btn-success rounded-pill" type="button" id="startbutton" onclick="location.href='game.html'" > Let's get started </button>
+                    <button class="btn btn-secondary rounded-pill" type="button" id="discordbutton" onClick="window.open('https://discord.gg/bRShrH9GtG');"><i class="fab fa-discord"></i></button>
+                    <button class="btn btn-primary rounded-pill" type="button" id="donatebutton" onClick="window.open('https://www.paypal.com/donate?hosted_button_id=V6DC9EZG4T562');"><i class="fab fa-paypal"></i></button>                
+            </div>
+        </div>
+    </div>
+
+<script>
+    var myVar;
+        
+    function myFunction() {
+        myVar = setTimeout(showPage, 1500);
+    }
+        
+    function showPage() {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("page").style.display = "block";
+    }
+</script>
+
+</body>

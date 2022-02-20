@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Game</title>
+    <meta name="keywords" content="Gta sa, guesser, san andreas, san andreas guesser,guessr">
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/ardhi/Leaflet.MousePosition/master/src/L.Control.MousePosition.css">
+    <link rel="stylesheet" href="css/map.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js" type="text/javascript"></script>
+    <link rel = "icon" href = "img/ico.png" type = "image/x-icon">
+    <script src="https://cdn.rawgit.com/ardhi/Leaflet.MousePosition/master/src/L.Control.MousePosition.js" type="text/javascript"></script>
+    <style>
+      html, body, #map { width:100%; height:100%; margin:0; padding:0; z-index: 1; background:#223f4f; }
+    </style>
+  </head>
+  <body onload="mainFunction()">
+    <div class="container">
+      <div>
+        <span id="imgFrame"></span>
+        <p id="distance"></p>
+        <button id="submitButton" onclick="calculate()">Submit</button>
+      </div>
+      <div id="map"></div>
+    </div>
+    
+    <script type="text/javascript">
+      let fixedMarkers = [
+        [-3720,852,"1.png"],
+        [-3584,1972,"2.png"],
+        [-5048,3368,"3.png"],
+        [-4812,3848,"4.png"],
+        [-3424,280,"5.png"],
+        [-2672,4464,"6.png"],
+        [-2912,5408,"7.png"],
+        [-3064,5152,"8.png"],
+        [-672,712,"9.png"],
+        [-1634,3534,"10.png"],
+        [-1508,4016,"11.png"],
+        [-1268,4368,"12.png"],
+        [-948,4350,"13.png"],
+        [-953,4158,"14.png"],
+        [-4018,4291,"15.png"],
+        [-4149,4609,"16.png"],
+        [-4882,4824,"17.png"],
+        [-4804,5196,"18.png"],
+        [-5288,4523,"19.png"],
+        [-4728,534,"20.png"],
+        [-5360,928,"21.png"],
+        [-5487,850,"22.png"],
+        [-944,2323,"23.png"],
+        [-737,2202,"24.png"],
+        [-832,1941,"25.png"],
+        [-4083,5125,"26.png"],
+        [-4679,5480,"27.png"],
+        [-4042,5379,"28.png"],
+        [-3644,5373,"29.png"],
+        [-2683,5345,"30.png"],
+        [-1750,5283,"31.png"],
+        [-1668,3052,"32.png"],
+        [-5606,1784,"33.png"],
+        [-4113,2114,"34.png"],
+        [-3822,1490,"35.png"],
+        [-2581,1359,"36.png"],
+        [-1744,1340,"37.png"],
+        [-1614,1512,"38.png"],
+        [-1691,1216,"39.png"],
+        [-1451,542,"40.png"],
+        [-2180,3556,"41.png"],
+      ]
+      var targetPos;
+      var userMarker;
+      var targetMarker;
+      var lat, lng;
+      var mapExtent = [0.00000000, -6000.00000000, 6000.00000000, 0.00000000];
+      var mapMinZoom = 2;
+      var mapMaxZoom = 5;
+      var mapMaxResolution = 1.00000000;
+      var mapMinResolution = Math.pow(2, mapMaxZoom) * mapMaxResolution;
+      var tileExtent = [0.00000000, -6000.00000000, 6000.00000000, 0.00000000];
+      var crs = L.CRS.Simple;
+      crs.transformation = new L.Transformation(1, -tileExtent[0], -1, tileExtent[3]);
+      crs.scale = function(zoom) {
+        return Math.pow(2, zoom) / mapMinResolution;
+      };
+      crs.zoom = function(scale) {
+        return Math.log(scale * mapMinResolution) / Math.LN2;
+      };
+      var layer;
+      var map = new L.Map('map', {
+          maxZoom: mapMaxZoom,
+          minZoom: mapMinZoom,
+          crs: crs
+        });
+        
+        layer = L.tileLayer('{z}/{x}/{y}.jpg', {
+          minZoom: mapMinZoom, maxZoom: mapMaxZoom,
+          tileSize: L.point(254, 254),
+          noWrap: true,
+          tms: false
+        }).addTo(map);
+      map.fitBounds([
+        crs.unproject(L.point(mapExtent[2], mapExtent[3])),
+        crs.unproject(L.point(mapExtent[0], mapExtent[1]))
+      ]);
+      var hereIcon = L.icon({
+        iconUrl: 'https://wiki.multitheftauto.com/images/1/1f/Blipid3.png',
+        iconSize: [32,32],
+      })
+      var targetBlip = L.icon({
+        iconUrl: 'img/targetBlip.png',
+        iconSize: [32,32],
+      })
+      // fixedMarkers.forEach((cords) => {
+      //   console.log(cords);
+      // });
+      map.on('click', addMarker);
+
+      function addMarker(e){
+        if (userMarker != undefined){
+          map.removeLayer(userMarker)
+        }
+        // Add marker to map at click location;
+        if (e.latlng.lat > 0){
+          return;
+        }else if (e.latlng.lng < 0){
+          return;
+        }else if (e.latlng.lat < -6000){
+          return;
+        }else if (e.latlng.lng > 6000){
+          return;
+        }
+
+        lat = e.latlng.lat;
+        lng = e.latlng.lng;
+        userMarker = new L.marker(e.latlng,{icon:hereIcon}).addTo(map);
+        console.log(userMarker.getLatLng())
+        // console.log(random_item(fixedMarkers))
+      }
+      function random_item(fixedMarkers){
+        return fixedMarkers[Math.floor(Math.random()*fixedMarkers.length)];
+      }
+      
+      function mainFunction(){
+        targetPos = random_item(fixedMarkers);
+        document.getElementById("imgFrame").innerHTML= "<img src='img/"+ targetPos[2] + "' id='mainImg'>";
+      }
+
+      function calculate(e){
+        
+        if (userMarker == undefined){
+          alert("Place your guess first!");
+          return;
+        }
+        if (targetMarker != undefined){
+          map.removeLayer(targetMarker);
+          location.reload();
+          return;
+        }
+        targetMarker = new L.marker(targetPos,{icon:targetBlip}).addTo(map);
+        var container = document.getElementById('distance');
+        var result = dist(lat,lng,targetPos[0],targetPos[1]);
+        // console.log(dist(lat,lng,targetPos[0],targetPos[1]));
+        var polylinePoints = [
+          [lat, lng],
+          [targetPos[0], targetPos[1]]
+        ];
+        var polyline = L.polyline(polylinePoints).addTo(map);
+        container.innerHTML = (~~result + " meter away from the target");
+      }
+
+      function diff (num1, num2) {
+        if (num1 > num2) {
+          return (num1 - num2);
+        } else {
+          return (num2 - num1);
+        }
+      }
+      
+      function dist (x1, y1, x2, y2) {
+        var deltaX = diff(x1, x2);
+        var deltaY = diff(y1, y2);
+        var dist = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+        return (dist);
+      } 
+    </script>
+  </body>
+</html>
