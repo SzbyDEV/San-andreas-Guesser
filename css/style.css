@@ -2,9 +2,6 @@ html {
 	background: url(../img/bg.png) no-repeat center center fixed;
 	background-size: cover;
 }
-element.style {
-    padding-top: 150px;
-}
 .flex-container{
     flex-direction: column;
     height: 100%;
@@ -29,6 +26,7 @@ element.style {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    padding-top: 150px;
 }
 .nametext{
     font-family: 'Roboto', sans-serif;
