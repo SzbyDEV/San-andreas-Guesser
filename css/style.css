@@ -3,7 +3,7 @@ html {
 	background-size: cover;
 }
 element.style {
-	padding-top: 150px;
+    padding-top: 150px;
 }
 .flex-container{
     flex-direction: column;
