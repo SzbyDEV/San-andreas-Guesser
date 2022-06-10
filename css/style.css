@@ -11,7 +11,7 @@ html {
     justify-content: flex-start;
 }
 .text{
-    font-family: 'Pacifico', cursive;
+    font-family: 'Exo';
     font-size: 80px;
     margin-top: 0%;
     color: wheat;
@@ -20,10 +20,8 @@ html {
     justify-self: center;
     margin-bottom: auto;
     height: 300px;
-    width: 400px;
     opacity: 1;
     display: flex;
-    flex-direction: row-reverse;
     align-items: center;
     justify-content: space-between;
 }
