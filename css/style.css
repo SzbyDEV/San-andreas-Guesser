@@ -19,7 +19,7 @@ html {
 .userbox{
     justify-self: center;
     margin-bottom: auto;
-    height: 300px;
+    height: 150px;
     opacity: 1;
     display: flex;
     align-items: center;
