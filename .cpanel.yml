@@ -1,6 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/san/public_html/
-    - /bin/cp game.html $DEPLOYPATH
-    - /bin/cp index.html $DEPLOYPATH
+    - export DEPLOYPATH=/home/san/public_html
+    - /bin cp * $DEPLOYPATH
