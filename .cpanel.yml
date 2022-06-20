@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/san/public_html
-    - /bin cp * $DEPLOYPATH
+    - /bin/cp * $DEPLOYPATH
