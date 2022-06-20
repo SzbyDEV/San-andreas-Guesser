@@ -4,6 +4,3 @@ deployment:
     - export DEPLOYPATH=/home/san/public_html/
     - /bin/cp game.html $DEPLOYPATH
     - /bin/cp index.html $DEPLOYPATH
-    - /bin/cp -R css $DEPLOYPATH
-    - /bin/cp -R js $DEPLOYPATH
-    - /bin/cp -R img $DEPLOYPATH
