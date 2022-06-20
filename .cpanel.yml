@@ -3,3 +3,6 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/san/public_html
     - /bin/cp * $DEPLOYPATH
+    - /bin/cp -R css $DEPLOYPATH
+    - /bin/cp -R img $DEPLOYPATH
+    - /bin/cp -R js $DEPLOYPATH
