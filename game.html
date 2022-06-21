@@ -7,6 +7,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css">
     <link rel="stylesheet" href="https://cdn.rawgit.com/ardhi/Leaflet.MousePosition/master/src/L.Control.MousePosition.css">
@@ -14,6 +15,9 @@
     <link rel = "icon" href = "img/ico.png" type = "image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js" type="text/javascript"></script>
     <script src="https://cdn.rawgit.com/ardhi/Leaflet.MousePosition/master/src/L.Control.MousePosition.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </head>
   <body onload="mainFunction()">
     <!-- Main Grid -->
@@ -22,11 +26,41 @@
         <div class="col-md-auto sticky-top" style="height: 300px;">
           <div class="imgFrame">
             <p id="imgLink"></p>
-            <p class="text" id="distance"></p>
-          <button id="submitButton" onclick="calculate()">Submit</button>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col" align="center">
+                  <i class="bi bi-pin-map-fill" style="font-size: 3rem; color: cornflowerblue;"></i><br>
+                  <p class="text" id="guess"></p>
+                </div>
+                <div class="col" align="center">
+                  <i class="bi bi-check-circle" style="font-size: 3rem; color: cornflowerblue;"></i><br>
+                  <p class="text" id="score">0</p>
+                </div>
+              </div>
+              <p class="text" id="distance" align="center"></p>
+            </div>
+            <div class="d-grid gap-2">
+              <button class="btn btn-primary" id="submitButton" onclick="calculate()">Submit</button>
+            </div>
           </div>
         </div>
         <div class="col w-auto h-100% p-3" style="width:1000px; height:1000px;" id="map"></div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h5 class="modal-title w-100" id="exampleModalLongTitle">Your score</h5>
+          </div>
+          <div class="modal-body text-center">
+            <p class="text" id="scoreSummary"></p>
+          </div>
+          <div class="d-grid gap-2">
+            <button type="button" class="btn btn-primary rounded-0" data-dismiss="modal" onclick="newGame()">New game</button>
+          </div>
+        </div>
       </div>
     </div>
     <!-- Script -->
@@ -74,6 +108,8 @@
         [-1451,542,"40.png"],
         [-2180,3556,"41.png"],
       ]
+      var guess = sessionStorage.getItem("guess");
+      var score = sessionStorage.getItem("score");
       var targetPos;
       var userMarker;
       var targetMarker;
@@ -143,17 +179,34 @@
         console.log(userMarker.getLatLng())
         // console.log(random_item(fixedMarkers))
       }
-      function random_item(fixedMarkers){
+      function randomItem(fixedMarkers){
         return fixedMarkers[Math.floor(Math.random()*fixedMarkers.length)];
       }
       
       function mainFunction(){
-        targetPos = random_item(fixedMarkers);
+        targetPos = randomItem(fixedMarkers);
         document.getElementById("imgLink").innerHTML= "<img src='img/"+ targetPos[2] + "' id='mainImg'>";
+        if(!score){
+          document.getElementById('score').innerHTML = 0;
+        }
+        if(!guess){
+          document.getElementById('guess').innerHTML = 0;
+        }else if(guess == 5){
+          var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+          myModal.show();
+          document.getElementById('guess').innerHTML = sessionStorage.getItem("guess") + "/5";
+          document.getElementById('score').innerHTML = sessionStorage.getItem("score");
+          document.getElementById('scoreSummary').innerHTML = sessionStorage.getItem("score") + "/2500";
+        }
+        else{
+          document.getElementById('guess').innerHTML = sessionStorage.getItem("guess") + "/5";
+          document.getElementById('score').innerHTML = sessionStorage.getItem("score");
+        }
       }
 
       function calculate(e){
-        
+        score = sessionStorage.getItem("score");
+        guess = sessionStorage.getItem("guess");
         if (userMarker == undefined){
           alert("Place your guess first!");
           return;
@@ -163,16 +216,28 @@
           location.reload();
           return;
         }
+        if(!score){
+          score = 0;
+        }
         targetMarker = new L.marker(targetPos,{icon:targetBlip}).addTo(map);
-        var container = document.getElementById('distance');
         var result = dist(lat,lng,targetPos[0],targetPos[1]);
+        guess = ~~guess + 1;
+        if(~~result<=500){
+          score = ~~score + ~~(500 - result)
+        }
+        sessionStorage.setItem("score",parseInt(score))>
+        sessionStorage.setItem("guess",parseInt(guess));
+        document.getElementById('guess').innerHTML = (guess) + "/5";
+        document.getElementById('score').innerHTML = (score);
         // console.log(dist(lat,lng,targetPos[0],targetPos[1]));
         var polylinePoints = [
           [lat, lng],
           [targetPos[0], targetPos[1]]
         ];
         var polyline = L.polyline(polylinePoints).addTo(map);
-        container.innerHTML = (~~result + " meters away from the target");
+        document.getElementById('distance').innerHTML = (~~result + " meters away from the target");
+        document.getElementById('submitButton').innerHTML = ("Next");
+
       }
 
       function diff (num1, num2) {
@@ -189,6 +254,12 @@
         var dist = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
         return (dist);
       } 
+
+      function newGame(){
+        sessionStorage.clear();
+        location.reload();
+        return;
+      }
     </script>
   </body>
 </html>
