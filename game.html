@@ -197,6 +197,7 @@
           document.getElementById('guess').innerHTML = sessionStorage.getItem("guess") + "/5";
           document.getElementById('score').innerHTML = sessionStorage.getItem("score");
           document.getElementById('scoreSummary').innerHTML = sessionStorage.getItem("score") + "/2500";
+          sessionStorage.setItem("guess",parseInt(0));
         }
         else{
           document.getElementById('guess').innerHTML = sessionStorage.getItem("guess") + "/5";
