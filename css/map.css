@@ -11,3 +11,17 @@
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
 }
+#map{
+    background-color: #223f4f;
+}
+#logo{
+    max-width: 100%;
+    max-height: 100%;
+}
+.bottomdiv {
+    height: 400px;
+    width: 400px;
+    position:absolute;
+    left:0;
+    bottom:0;
+}
