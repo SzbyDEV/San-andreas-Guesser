@@ -13,6 +13,7 @@
 }
 #map{
     background-color: #223f4f;
+    cursor: default;
 }
 #logo{
     max-width: 100%;
