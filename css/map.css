@@ -20,9 +20,9 @@
     max-height: 100%;
 }
 .bottomdiv {
-    height: 400px;
-    width: 400px;
+    height: 300px;
+    width: 300px;
     position:absolute;
-    left:0;
-    bottom:0;
+    left: 50px;
+    bottom: -10px;
 }
